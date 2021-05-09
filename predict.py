@@ -7,6 +7,8 @@ import numpy as np
 import argparse
 import locale
 import os
+import matplotlib.pyplot as plt
+import cv2
 
 
 
@@ -16,8 +18,13 @@ ap.add_argument("-d", "--dataset", type=str, required=True,
 	help="path to input dataset of house images")
 ap.add_argument("-m", "--model", type=str, required=True,
 	help="path to model")
+ap.add_argument("-s", "--size", type=int, required=True,
+	help="path to input dataset of house images")
 args = vars(ap.parse_args())
 
+size = args["size"]
+
+# Load the trained model
 model = keras.models.load_model(args["model"])
 
 # Price labels from HousesInfo.txt
@@ -28,6 +35,22 @@ df = datasets.load_house_attributes(inputPath)
 # Build the 2x2 room mosaics (same size as used in training)
 print("[INFO] loading house images...")
 images = datasets.load_house_images(df, args["dataset"])
+
+# Preview a few houses with their prices
+
+cv2.imshow("test",images[0])
+cv2.waitKey(0)
+
+num_images = 10
+for index in range(0, num_images):
+	plt.subplot(2, (num_images//2), index + 1)
+	plt.imshow(images[index], interpolation='nearest')
+	plt.title(f'{df["price"][index]}')
+	plt.axis('off')
+plt.show()
+
+
+# Normalize pixels to [0, 1]
 images = images / 255.0
 
 # Same split and seed as training, so the test set is identical

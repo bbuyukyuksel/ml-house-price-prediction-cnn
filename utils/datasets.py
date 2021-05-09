@@ -34,7 +34,7 @@ def process_house_attributes(df, train, test):
 
 	return (trainX, testX)
 
-def load_house_images(df, inputPath):
+def load_house_images(df, inputPath, size=32):
 	images = []
 
 	# Each house has 4 photos named <house_id>_<room>.<ext>
@@ -44,18 +44,18 @@ def load_house_images(df, inputPath):
 		housePaths = sorted(list(glob.glob(basePath)))
 
 		inputImages = []
-		outputImage = np.zeros((64, 64, 3), dtype="uint8")
+		outputImage = np.zeros((size*2, size*2, 3), dtype="uint8")
 
 		for housePath in housePaths:
 			image = cv2.imread(housePath)
-			image = cv2.resize(image, (32, 32))
+			image = cv2.resize(image, (size, size))
 			inputImages.append(image)
 
 		# 2x2 mosaic: [0] top-left, [1] top-right, [2] bottom-right, [3] bottom-left
-		outputImage[0:32, 0:32] = inputImages[0]
-		outputImage[0:32, 32:64] = inputImages[1]
-		outputImage[32:64, 32:64] = inputImages[2]
-		outputImage[32:64, 0:32] = inputImages[3]
+		outputImage[0:size, 0:size] = inputImages[0]
+		outputImage[0:size, size:size*2] = inputImages[1]
+		outputImage[size:size*2, size:size*2] = inputImages[2]
+		outputImage[size:size*2, 0:size] = inputImages[3]
 
 		images.append(outputImage)
 
