@@ -34,7 +34,7 @@ df = datasets.load_house_attributes(inputPath)
 
 # Build the 2x2 room mosaics (same size as used in training)
 print("[INFO] loading house images...")
-images = datasets.load_house_images(df, args["dataset"])
+images = datasets.load_house_images(df, args["dataset"], size=size)
 
 # Preview a few houses with their prices
 
