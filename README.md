@@ -12,18 +12,18 @@ Built as a deep learning course project (MasterEdu) on a custom dataset of real 
 Each house is represented by four photos: **living room, kitchen, bedroom and bathroom**.
 
 1. Every photo is resized to `size × size`.
-2. The four photos are tiled into a single `2·size × 2·size` mosaic, so one image describes the whole house.
+2. The four photos are tiled into a single `2·size × 2·size` mosaic (rooms sorted by file name, so every house has the same layout).
 3. Prices are scaled to `[0, 1]` by dividing by the highest price in the training set.
 4. A small CNN (`CONV → ReLU → BN → POOL` ×3 with 16/32/64 filters, then dense layers) outputs a single value.
 5. The model is trained with **mean absolute percentage error (MAPE)** as the loss, using Adam.
 
 ```
 ┌──────────┬──────────┐
-│  living  │ kitchen  │
-│   room   │          │      ┌─────┐
+│ bathroom │ kitchen  │
+│          │          │      ┌─────┐
 ├──────────┼──────────┤ ───▶ │ CNN │ ───▶ price
-│ bathroom │ bedroom  │      └─────┘
-│          │          │
+│ bedroom  │  living  │      └─────┘
+│          │   room   │
 └──────────┴──────────┘
 ```
 
